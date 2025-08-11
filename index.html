@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Neon Tic Tac Toe</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="flex flex-col items-center justify-center p-4">
+    <div class="max-w-3xl w-full">
+        <h1 class="neon-text text-5xl font-bold text-center mb-2 py-4">VASU TIC TAC TOE</h1>
+            <div class="text-center mb-4 space-x-2">
+                <select id="theme-selector" class="px-4 py-2 bg-gray-800 rounded-full text-white">
+                    <option value="neon">Neon Theme</option>
+                    <option value="matrix">Matrix Theme</option>
+                    <option value="retro">Retro Theme</option>
+                </select>
+                <button id="toggle-sound" class="px-4 py-2 bg-gray-800 rounded-full text-white">
+                     🔈 Sound On
+                </button>
+            </div>
+        
+        <div class="flex flex-col md:flex-row justify-between items-center mb-6 gap-4">
+            <div class="player-card bg-gray-800 p-4 rounded-lg flex items-center gap-3 transition-all duration-300" id="player1">
+                <div class="w-12 h-12 rounded-full bg-gradient-to-br from-blue-400 to-blue-600 flex items-center justify-center">
+                    <span class="text-xl font-bold">X</span>
+                </div>
+                <div>
+                    <h3 class="text-sm text-gray-400">VAISHAK</h3>
+                    <p class="text-xl font-bold" id="player1-name">Human</p>
+                </div>
+                <div class="ml-auto text-2xl font-bold" id="score1">0</div>
+            </div>
+            
+            <div class="text-center space-x-2">
+                <button id="restart-btn" class="px-6 py-2 bg-purple-900 hover:bg-purple-800 rounded-full transition-all transform hover:scale-105">
+                    Restart Game
+                </button>
+                <select id="difficulty" class="px-4 py-2 bg-gray-800 rounded-full text-white">
+                    <option value="easy">Easy</option>
+                    <option value="medium" selected>Medium</option>
+                    <option value="hard">Hard</option>
+                </select>
+            </div>
+            
+            <div class="player-card bg-gray-800 p-4 rounded-lg flex items-center gap-3 transition-all duration-300" id="player2">
+                <div class="w-12 h-12 rounded-full bg-gradient-to-br from-pink-400 to-pink-600 flex items-center justify-center">
+                    <span class="text-xl font-bold">O</span>
+                </div>
+                <div>
+                    <h3 class="text-sm text-gray-400">PLAYER 2</h3>
+                    <p class="text-xl font-bold" id="player2-name">Computer</p>
+                </div>
+                <div class="ml-auto text-2xl font-bold" id="score2">0</div>
+            </div>
+        </div>
+        
+        <div class="grid grid-cols-3 gap-4 mb-6 w-full max-w-md mx-auto">
+            <div class="cell bg-gray-900 rounded-lg flex items-center justify-center" data-index="0"></div>
+            <div class="cell bg-gray-900 rounded-lg flex items-center justify-center" data-index="1"></div>
+            <div class="cell bg-gray-900 rounded-lg flex items-center justify-center" data-index="2"></div>
+            <div class="cell bg-gray-900 rounded-lg flex items-center justify-center" data-index="3"></div>
+            <div class="cell bg-gray-900 rounded-lg flex items-center justify-center" data-index="4"></div>
+            <div class="cell bg-gray-900 rounded-lg flex items-center justify-center" data-index="5"></div>
+            <div class="cell bg-gray-900 rounded-lg flex items-center justify-center" data-index="6"></div>
+            <div class="cell bg-gray-900 rounded-lg flex items-center justify-center" data-index="7"></div>
+            <div class="cell bg-gray-900 rounded-lg flex items-center justify-center" data-index="8"></div>
+        </div>
+        
+        <div class="flex justify-between items-center max-w-md mx-auto mb-6">
+            <div class="bg-gray-800 p-3 rounded-lg text-center w-1/2 mr-2">
+                <p class="text-sm text-gray-400">TURN</p>
+                <p class="text-xl font-bold" id="current-turn">X's Turn</p>
+            </div>
+            <div class="bg-gray-800 p-3 rounded-lg text-center w-1/2 ml-2">
+                <p class="text-sm text-gray-400">GAME</p>
+                <p class="text-xl font-bold">#<span id="game-count">1</span></p>
+            </div>
+        </div>
+        <div id="game-history" class="bg-gray-800 p-3 rounded-lg mt-4 max-w-md mx-auto h-32 overflow-auto">
+            <div class="flex justify-between items-center mb-2">
+                <p class="text-sm text-gray-400">GAME HISTORY</p>
+                <button id="clear-history" class="text-xs text-purple-400 hover:text-purple-300">Clear</button>
+            </div>
+            <div id="history-log" class="space-y-1"></div>
+        </div>
+
+        <div class="bg-gray-800 p-4 rounded-lg mt-4 max-w-md mx-auto">
+            <div class="flex justify-center gap-4">
+                <button id="pve-mode" class="px-4 py-2 bg-purple-700 rounded-full transition-all transform hover:scale-105">
+                    Player vs Computer
+                </button>
+                <button id="pvp-mode" class="px-4 py-2 bg-indigo-700 rounded-full transition-all transform hover:scale-105">
+                    Player vs Player
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <div id="game-modal" class="fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center z-50 hidden modal">
+        <div class="bg-gray-900 p-8 rounded-lg max-w-md w-full mx-4 border border-purple-500">
+            <h2 class="text-3xl font-bold mb-4 neon-text" id="modal-title">Game Over</h2>
+            <p class="text-xl mb-6" id="modal-message">Player X wins!</p>
+            <div class="flex justify-center gap-4">
+                <button id="new-game-btn" class="px-6 py-2 bg-blue-600 hover:bg-blue-500 rounded-full transition-all">
+                    New Game
+                </button>
+                <button id="close-modal-btn" class="px-6 py-2 bg-gray-700 hover:bg-gray-600 rounded-full transition-all">
+                    Close
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <audio id="click-sound" src="https://assets.mixkit.co/sfx/preview/mixkit-arcade-game-jump-coin-216.mp3" preload="auto"></audio>
+    <audio id="win-sound" src="https://assets.mixkit.co/sfx/preview/mixkit-winning-chimes-2015.mp3" preload="auto"></audio>
+    <audio id="draw-sound" src="https://assets.mixkit.co/sfx/preview/mixkit-retro-arcade-casino-notification-267.mp3" preload="auto"></audio>
+    <script src="script.js"></script>
+</body>
+</html>
